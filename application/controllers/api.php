@@ -1750,12 +1750,23 @@ class Api extends CI_Controller {
                     if($app_map_view_setting->distance !== ''){//if distance not given then default distance will assign as 500
                         $saved_distance=$app_map_view_setting->distance;
                     }
-                    $matching_value = $record[$app_map_view_setting->matching_field]; //this field name getting from setting and getting value from received json
-                    $kml_poligon_rec = $this->db->get_where('kml_poligon', array('app_id' => $app_id, 'type' => 'distence','matching_value' => $matching_value))->row_array();
+                    $matching_value = 
+                        $record[$app_map_view_setting->matching_field]; //this field name getting from 
+                                                        // setting and getting value from received json
+                    $kml_poligon_rec = 
+                        $this->db->get_where('kml_poligon', 
+                        array('app_id' => $app_id, 
+                            'type' => 'distence',
+                            'matching_value' => $matching_value)
+                        )->row_array();
                     
                     if(!empty($kml_poligon_rec)){
                         $lat_long = explode(',', $location);//Received location from mobile device
-                        $distance_from_center = lan_lng_distance($kml_poligon_rec['latitude'], $kml_poligon_rec['longitude'],$lat_long[0], $lat_long[1]);
+                        $distance_from_center = 
+                            lan_lng_distance($kml_poligon_rec['latitude'], 
+                            $kml_poligon_rec['longitude'],
+                            $lat_long[0], 
+                            $lat_long[1]);
                         if($distance_from_center > $saved_distance)
                         {
                             $warning_message  = 'Your location mismatched. ';
@@ -1793,7 +1804,9 @@ class Api extends CI_Controller {
                         }
                     }
                     // move the file
-                    if ($s3->putObjectFile($fileTempName, $bucket_name, $imgName, S3::ACL_PUBLIC_READ)) {
+                    if ($s3->
+                            putObjectFile($fileTempName, $bucket_name, $imgName, 
+                            S3::ACL_PUBLIC_READ)) {
                         $imgName = 'http://' . $bucket_name . '.s3.amazonaws.com/' . $imgName;
                         $temp_array = array(
                             'image' => $imgName,
@@ -1838,7 +1851,9 @@ class Api extends CI_Controller {
                         $error_before = array(
                             'file' => $data ['upload_data'] ['file_name']
                         );
-                        $imgName = NFS_IMAGE_PATH.'/app_id_'.$app_id .'/'. $data ['upload_data'] ['file_name'];
+                        $imgName = 
+                            NFS_IMAGE_PATH.'/app_id_'.$app_id .'/'. 
+                            $data ['upload_data'] ['file_name'];
                         $temp_array = array(
                             'image' => $imgName,
                             'title' => $image_title
@@ -1864,7 +1879,8 @@ class Api extends CI_Controller {
                 $town_name = strip_tags($town);
             }
 
-            $district = $this->getDistrictName($location); // Get Town name against location
+            $district = 
+                $this->getDistrictName($location); // Get Town name against location
             if ($district) {
                 $district_name = strip_tags($district);
             }
@@ -1892,7 +1908,10 @@ class Api extends CI_Controller {
             ///////////////////////// HASSAN ANWAR     ////////////////////////////
             ///////////////////////////////////////////////////////////////////////
 
-            $multiChoices = $this->db->query("Select * from form_multiselectFieldLabels where formId='$form_id'");
+            $multiChoices = 
+                $this->db->query(
+                    "Select * from form_multiselectFieldLabels 
+                    where formId='$form_id'");
             foreach($multiChoices->result() as $row)
             {
                 $fd=(array) $dataresultnew1;
@@ -1926,7 +1945,8 @@ class Api extends CI_Controller {
             );
             $this->db->insert( 'mobile_activity_log', $mobile_log);
             //Mobile activity log - End
-            $err_msg = 'Record Not Submitted. '.$this->db->_error_message().'.                         "Please Refresh your application"';
+            $err_msg = 'Record Not Submitted. '.$this->db->
+                _error_message().'.                         "Please Refresh your application"';
             $jsone_array = array (
                         'error' => $err_msg
             );
@@ -1967,7 +1987,9 @@ class Api extends CI_Controller {
                     'image' => $image_path ['image']
                 );
                 if ($security_key) {
-                    $add_images ['title'] = urldecode(base64_decode(str_replace($form_info ['security_key'], '', $image_path ['title'])));
+                    $add_images ['title'] = 
+                        urldecode(base64_decode(str_replace($form_info ['security_key']
+                        , '', $image_path ['title'])));
                 } else {
                     $add_images ['title'] = urldecode($image_path ['title']);
                 }
