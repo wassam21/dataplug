@@ -1611,7 +1611,8 @@ class Api extends CI_Controller {
     }
 
     /**
-     * This function is used for saving the record which sent from android application
+     * This function is used for saving the record 
+     * which sent from android application
      * 
      * @return json
      * @author Zahid Nadeem <zahidiubb@yahoo.com>
@@ -1650,7 +1651,15 @@ class Api extends CI_Controller {
         }
         
         //Stop activity saving if already saved
-        $activity_aready_exist = $this->db->get_where('zform_'.$form_id, array('form_id' => $form_id, 'imei_no' => $imei_no,'activity_datetime' => $activity_datetime))->row_array();
+        $activity_aready_exist = $this->db->
+            get_where(
+                'zform_'.$form_id, 
+                array(
+                    'form_id' => $form_id, 
+                    'imei_no' => $imei_no,
+                    'activity_datetime' => $activity_datetime
+                )
+            )->row_array();
         if ($activity_aready_exist) {
             $jsone_array = array(
                 'success' => 'This activity already submitted.'
@@ -1671,8 +1680,10 @@ class Api extends CI_Controller {
         $app_id = $form_info ['app_id'];
         // Temprary block the record sending
         $app_general_setting = get_app_general_settings($app_id);
-        if (isset($app_general_setting->record_stop_sending) && $app_general_setting->record_stop_sending == 1) {
-            $error_message = "Record receiving service currently not available. Please Try later";
+        if (isset($app_general_setting->record_stop_sending) 
+            && $app_general_setting->record_stop_sending == 1) {
+            $error_message = "Record receiving service currently not available. 
+                Please Try later";
             if ($app_general_setting->message_stop_sending_record != '') {
                 $error_message = $app_general_setting->message_stop_sending_record;
             }
@@ -1692,7 +1703,8 @@ class Api extends CI_Controller {
             exit();
         }
 
-/*        $authorized = $this->app_model->appuser_imei_already_exist($imei_no, $app_id);
+/*        $authorized = $this->app_model->
+                appuser_imei_already_exist($imei_no, $app_id);
         if ($app_general_setting->only_authorized == 1 && !$authorized) {
             $jsone_array = array(
                 'error' => 'You are not authorized'
@@ -1727,12 +1739,22 @@ class Api extends CI_Controller {
                     $key => $v
                 );
                 $captions_images = array_merge($captions_images, $tempary_cap);
-            } elseif ($key == 'form_id' || $key == 'security_key' || $key == "dateTime" || $key == "landing_page" || $key == "is_take_picture" || $key == 'form_icon_name') {
+            } elseif ($key == 'form_id' || $key == 'security_key' || $key == "dateTime" 
+                || $key == "landing_page" || $key == "is_take_picture" 
+                || $key == 'form_icon_name') {
                 
             } else {
 
                 if ($security_key) {
-                    $vdcode = urldecode(base64_decode(str_replace($form_info ['security_key'], '', $v)));
+                    $vdcode = urldecode(
+                                base64_decode(
+                                    str_replace(
+                                        $form_info ['security_key'], 
+                                        '', 
+                                        $v
+                                    )
+                                )
+                            );
                 } else {
                     $vdcode = urldecode($v);
                 }
@@ -1744,10 +1766,13 @@ class Api extends CI_Controller {
         }
         $warning_message = '';
         $app_map_view_setting = get_map_view_settings($app_id);
-        if(isset($app_map_view_setting->map_distance_mapping) && $app_map_view_setting->map_distance_mapping)//if Distance maping on then call this block
+        //if Distance maping on then call this block
+        if(isset($app_map_view_setting->map_distance_mapping) 
+            && $app_map_view_setting->map_distance_mapping)
         {
                     $saved_distance=500;
-                    if($app_map_view_setting->distance !== ''){//if distance not given then default distance will assign as 500
+                    if($app_map_view_setting->distance !== ''){
+                        //if distance not given then default distance will assign as 500
                         $saved_distance=$app_map_view_setting->distance;
                     }
                     
