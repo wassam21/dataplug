@@ -1010,7 +1010,14 @@ class Api extends CI_Controller {
                     'image' => $image_path ['image']
                 );
                 if(strpos($image_path['title'], $form_info['security_key']) !== FALSE){
-                    $add_images ['title'] = urldecode(base64_decode(str_replace($form_info ['security_key'], '', $image_path['title'])));
+                    $add_images ['title'] = 
+                        urldecode(
+                            base64_decode(
+                                str_replace(
+                                    $form_info ['security_key'], '', $image_path['title']
+                                )
+                            )
+                        );
                 } else {
                     $add_images ['title'] = urldecode($image_path ['title']);
                 }
@@ -1035,7 +1042,8 @@ class Api extends CI_Controller {
 
         // this code is used for sending record to other domain
         if ($post_url) {
-            if ($form_id == '4575' && strpos($_SERVER ['SERVER_NAME'], 'dataplug.itu') !== false) {
+            if ($form_id == '4575' && 
+                strpos($_SERVER ['SERVER_NAME'], 'dataplug.itu') !== false) {
                 $tempary = array(
                     'imei_no' => $imei_no,
                     'image_url' => $add_images ['image'],
@@ -1100,7 +1108,8 @@ class Api extends CI_Controller {
                 // app3883($app_id,$imei_no,$dataresultnew1);
             }
         }
-        //$this->form_results_model->update_mobile_activity($activity_inserted_id,array('error'=>'submitted'));
+        //$this->form_results_model->update_mobile_activity(
+            // $activity_inserted_id,array('error'=>'submitted'));
         $this->form_results_model->remove_mobile_activity($activity_inserted_id);
         $jsone_array = array(
             'success' => 'Record submitted successfully!.'
@@ -1112,7 +1121,9 @@ class Api extends CI_Controller {
         //ob_get_level();
         //ob_start();
         ini_set ( 'memory_limit', '-1' );
-        $unsent_activity_array = $this->db->order_by('id', 'ASC')->get_where('mobile_activity_log',array(),100)->result_array();
+        $unsent_activity_array = $this->db->
+            order_by('id', 'ASC')->
+            get_where('mobile_activity_log',array(),100)->result_array();
         //echo count($unsent_activity_array);
         //exit;
         $i = 0;
@@ -1194,12 +1205,16 @@ class Api extends CI_Controller {
                         $key => $v
                     );
                     $captions_images = array_merge($captions_images, $tempary_cap);
-                } elseif ($key == 'form_id' || $key == 'security_key' || $key == "dateTime" || $key == "landing_page" || $key == "is_take_picture" || $key == 'form_icon_name') {
+                } elseif ($key == 'form_id' || $key == 'security_key' 
+                    || $key == "dateTime" || $key == "landing_page" 
+                    || $key == "is_take_picture" || $key == 'form_icon_name') {
                     
                 } else {
 
                 if(strpos($v, $form_info['security_key']) !== FALSE){
-                    $vdcode = urldecode(base64_decode(str_replace($form_info['security_key'], '', $v)));
+                    $vdcode = urldecode(
+                        base64_decode(str_replace($form_info['security_key'], '', $v))
+                    );
                 }
                 else {
                     $vdcode = urldecode($v);
@@ -1234,7 +1249,8 @@ class Api extends CI_Controller {
                     $err_msg.="TOWN api return null, ";
                 }
 
-                $district = $this->getDistrictName($location); // Get Town name against location
+                $district = $this->
+                    getDistrictName($location); // Get Town name against location
                 if ($district) {
                     $district_name = strip_tags($district);
                 } else {
@@ -1272,7 +1288,12 @@ class Api extends CI_Controller {
                         $fields_count = $this->db->list_fields('zform_' . $form_id);
                         $fields_count = array_map('strtolower', $fields_count);
                         if (count($fields_count) < 90) {
-                            $field = array($element => array('type' => 'VARCHAR', 'constraint' => 200, 'NULL' => TRUE));
+                            $field = 
+                                array(
+                                    $element => array(
+                                        'type' => 'VARCHAR', 'constraint' => 200, 'NULL' => TRUE
+                                    )
+                                );
                             $this->dbforge->add_column('zform_' . $form_id, $field, $after_field);
                         } else {
                             $field = array($element => array('type' => 'TEXT', 'NULL' => TRUE));
@@ -1284,7 +1305,11 @@ class Api extends CI_Controller {
             }
 
 
-            $this->form_results_model->update_mobile_activity($activity_inserted_id, array('form_data_decoded' => json_encode($dataresultnew1)));
+            $this->form_results_model->
+                update_mobile_activity(
+                    $activity_inserted_id, 
+                    array('form_data_decoded' => json_encode($dataresultnew1))
+                );
             $ret_ins = $this->db->insert('zform_' . $form_id, $dataresultnew1);
             $form_result_id_new = $this->db->insert_id();
             if (!$ret_ins) {
